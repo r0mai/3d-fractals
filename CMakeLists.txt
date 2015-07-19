@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 project(3d-fractals)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 find_package(OpenGL REQUIRED)
 
 add_subdirectory(3rd)
