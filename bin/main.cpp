@@ -1,5 +1,6 @@
 #include "Sierpinski.hpp"
 
 int main() {
-    sierpinski::run();
+    fractals::Sierpinski sierpinski;
+    sierpinski.run();
 }

@@ -1,7 +1,19 @@
 #pragma once
 
-namespace sierpinski {
+class GLFWwindow;
 
-void run();
+namespace fractals {
 
-} // namespace sierpinski
+class Sierpinski {
+public:
+
+    ~Sierpinski();
+
+    void run();
+private:
+    bool init();
+
+    GLFWwindow* window = nullptr;
+};
+
+} // namespace fractals
