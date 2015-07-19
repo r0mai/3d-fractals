@@ -6,6 +6,8 @@ add_definitions(
     -D_CRT_SECURE_NO_WARNINGS
 )
 
+### GLFW ###
+
 add_subdirectory(glfw-3.0.3)
 
 include_directories(
@@ -18,6 +20,8 @@ set(OPENGL_LIBRARY
     ${CMAKE_DL_LIBS}
     ${GLFW_LIBRARIES}
 )
+
+### GLEW ###
 
 set(GLEW_SOURCE
     glew-1.9.0/src/glew.c
