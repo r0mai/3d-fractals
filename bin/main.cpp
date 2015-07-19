@@ -1,6 +1,5 @@
-#include <iostream>
-#include "Header.hpp"
+#include "Sierpinski.hpp"
 
 int main() {
-    std::cout << foo() << std::endl;
+    sierpinski::run();
 }
