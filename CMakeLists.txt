@@ -11,4 +11,14 @@ include_directories(
     3rd/glfw-3.0.3/include/
     3rd/glm-0.9.4.0/
     3rd/glew-1.9.0/include/
+    src/
 )
+
+set(ALL_LIBS
+    ${OPENGL_LIBRARY}
+    GLFW_303
+    GLEW_190
+)
+
+add_subdirectory(src)
+add_subdirectory(bin)
