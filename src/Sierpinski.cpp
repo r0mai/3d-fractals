@@ -70,6 +70,10 @@ void Sierpinski::run() {
 
 	GLuint programId = loadShaders("shaders/simple.vert", "shaders/simple.frag");
 
+	// Get a handle for our buffers
+	GLuint vertexPosition_modelspaceID = glGetAttribLocation(
+        programId, "vertexPosition_modelspace");
+
     do {
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
@@ -77,22 +81,22 @@ void Sierpinski::run() {
         glUseProgram(programId);
 
         // 1st attribute buffer : vertices
-        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(vertexPosition_modelspaceID);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glVertexAttribPointer(
-           0,                  // attribute 0.
-           3,                  // size
-           GL_FLOAT,           // type
-           GL_FALSE,           // normalized?
-           0,                  // stride
-           (void*)0            // array buffer offset
+            vertexPosition_modelspaceID,
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
         );
 
         // Draw the triangle !
         // Starting from vertex 0; 3 vertices total -> 1 triangle
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(vertexPosition_modelspaceID);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
