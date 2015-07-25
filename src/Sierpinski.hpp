@@ -6,7 +6,7 @@ namespace fractals {
 
 class Sierpinski {
 public:
-
+    Sierpinski() = default;
     ~Sierpinski();
 
     void run();
