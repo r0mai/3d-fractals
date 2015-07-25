@@ -1,7 +1,7 @@
 #version 120
 
-attribute vec3 vertexPosition_modelspace;
+attribute vec3 vertexPositionModelspace;
 
 void main() {
-    gl_Position = vec4(vertexPosition_modelspace, 1.0);
+    gl_Position = vec4(vertexPositionModelspace, 1.0);
 }

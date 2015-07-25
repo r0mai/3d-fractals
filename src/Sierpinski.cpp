@@ -46,7 +46,7 @@ Sierpinski::~Sierpinski() {
 void Sierpinski::run() {
     init();
 
-    const GLfloat g_vertex_buffer_data[] = {
+    const GLfloat vertexBuffer[] = {
         -1.0f, -1.0f, 0.0f,
         1.0f, -1.0f, 0.0f,
         0.0f,  1.0f, 0.0f,
@@ -64,15 +64,15 @@ void Sierpinski::run() {
     // Give our vertices to OpenGL.
     glBufferData(
         GL_ARRAY_BUFFER,
-        sizeof(g_vertex_buffer_data),
-        g_vertex_buffer_data,
+        sizeof(vertexBuffer),
+        vertexBuffer,
         GL_STATIC_DRAW);
 
 	GLuint programId = loadShaders("shaders/simple.vert", "shaders/simple.frag");
 
 	// Get a handle for our buffers
-	GLuint vertexPosition_modelspaceID = glGetAttribLocation(
-        programId, "vertexPosition_modelspace");
+	GLuint vertexPositionModelspaceID = glGetAttribLocation(
+        programId, "vertexPositionModelspace");
 
     do {
         // Clear the screen
@@ -81,10 +81,10 @@ void Sierpinski::run() {
         glUseProgram(programId);
 
         // 1st attribute buffer : vertices
-        glEnableVertexAttribArray(vertexPosition_modelspaceID);
+        glEnableVertexAttribArray(vertexPositionModelspaceID);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glVertexAttribPointer(
-            vertexPosition_modelspaceID,
+            vertexPositionModelspaceID,
             3,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
@@ -96,7 +96,7 @@ void Sierpinski::run() {
         // Starting from vertex 0; 3 vertices total -> 1 triangle
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        glDisableVertexAttribArray(vertexPosition_modelspaceID);
+        glDisableVertexAttribArray(vertexPositionModelspaceID);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
