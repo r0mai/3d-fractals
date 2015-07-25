@@ -68,11 +68,11 @@ void Sierpinski::run() {
         vertexBuffer,
         GL_STATIC_DRAW);
 
-	GLuint programId = loadShaders("shaders/simple.vert", "shaders/simple.frag");
+    GLuint programId = loadShaders("shaders/simple.vert", "shaders/simple.frag");
 
-	// Get a handle for our buffers
-	GLuint vertexPositionModelspaceID = glGetAttribLocation(
-        programId, "vertexPositionModelspace");
+    // Get a handle for our buffers
+    GLuint vertexPositionModelspaceID = glGetAttribLocation(
+    programId, "vertexPositionModelspace");
 
     do {
         // Clear the screen
