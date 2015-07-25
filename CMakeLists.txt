@@ -20,5 +20,6 @@ set(ALL_LIBS
     GLEW_190
 )
 
+add_subdirectory(shaders)
 add_subdirectory(src)
 add_subdirectory(bin)

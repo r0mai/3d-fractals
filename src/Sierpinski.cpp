@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+#include "Shader.hpp"
+
 namespace fractals {
 
 bool Sierpinski::init() {
@@ -66,7 +68,14 @@ void Sierpinski::run() {
         g_vertex_buffer_data,
         GL_STATIC_DRAW);
 
+	GLuint programId = loadShaders("shaders/simple.vert", "shaders/simple.frag");
+
     do {
+        // Clear the screen
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glUseProgram(programId);
+
         // 1st attribute buffer : vertices
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
