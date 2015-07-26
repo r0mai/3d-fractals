@@ -100,8 +100,9 @@ void Sierpinski::run() {
             glm::vec3(0, 1, 0)  // Up vector
         );
 
-        auto rotateMatrix = glm::rotate(1.0f, glm::vec3(0.0, 1.0, 0.0));
-        model.setTransform(rotateMatrix * model.getTransform());
+        auto transform = model.getTransform();
+        transform = glm::rotate(transform, 1.0f, glm::vec3(0, 1, 0));
+        model.setTransform(transform);
 
         glm::mat4 MVP = projection * view * model.getTransform();
 
