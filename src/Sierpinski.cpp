@@ -80,8 +80,6 @@ void Sierpinski::run() {
 
     glm::mat4 model = glm::mat4(1.0f);
 
-    glm::mat4 MVP = projection * view * model;
-
     // Give our vertices to OpenGL.
     glBufferData(
         GL_ARRAY_BUFFER,
@@ -89,8 +87,17 @@ void Sierpinski::run() {
         vertexBuffer,
         GL_STATIC_DRAW);
 
-
     do {
+        glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+
+        glm::mat4 view = glm::lookAt(
+            glm::vec3(4,3,3), // Camera is at (4,3,3), in World Space
+            glm::vec3(0,0,0), // and looks at the origin
+            glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
+        );
+
+        glm::mat4 MVP = projection * view * model;
+
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
 
