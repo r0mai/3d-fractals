@@ -41,6 +41,9 @@ bool Sierpinski::init() {
 
     glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
     model = Model::createPyramid(
         glm::vec3(1, 0, -1),
         glm::vec3(-1, 0, -1),
@@ -96,18 +99,6 @@ void Sierpinski::run() {
         auto vertexBuffer = model.getVertexBuffer();
         auto colorBuffer = model.getColorBuffer();
         assert(vertexBuffer.size() == colorBuffer.size());
-        // Give our vertices to OpenGL.
-        glBufferData(
-            GL_ARRAY_BUFFER,
-            vertexBuffer.size() * sizeof(GLfloat),
-            vertexBuffer.data(),
-            GL_STATIC_DRAW);
-
-        glBufferData(
-            GL_ARRAY_BUFFER,
-            colorBuffer.size() * sizeof(GLfloat),
-            colorBuffer.data(),
-            GL_STATIC_DRAW);
 
         glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 
@@ -123,7 +114,7 @@ void Sierpinski::run() {
         glm::mat4 MVP = projection * view * model.getTransform();
 
         // Clear the screen
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(programId);
 
@@ -132,6 +123,24 @@ void Sierpinski::run() {
         // 1st attribute buffer : vertices
         glEnableVertexAttribArray(vertexPositionModelspaceID);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferHandle);
+
+        // 2nd attribute buffer : colors
+        glEnableVertexAttribArray(vertexColorID);
+        glBindBuffer(GL_ARRAY_BUFFER, colorBufferHandle);
+
+        // Give our vertices to OpenGL.
+        glBufferData(
+            GL_ARRAY_BUFFER,
+            vertexBuffer.size() * sizeof(GLfloat),
+            vertexBuffer.data(),
+            GL_STATIC_DRAW);
+
+        glBufferData(
+            GL_ARRAY_BUFFER,
+            colorBuffer.size() * sizeof(GLfloat),
+            colorBuffer.data(),
+            GL_STATIC_DRAW);
+
         glVertexAttribPointer(
             vertexPositionModelspaceID,
             3,                  // size
@@ -141,9 +150,6 @@ void Sierpinski::run() {
             (void*)0            // array buffer offset
         );
 
-        // 2nd attribute buffer : colors
-        glEnableVertexAttribArray(vertexColorID);
-        glBindBuffer(GL_ARRAY_BUFFER, colorBufferHandle);
         glVertexAttribPointer(
             vertexColorID,               // The attribute we want to configure
             3,                           // size
