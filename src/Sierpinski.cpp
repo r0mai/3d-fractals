@@ -32,10 +32,17 @@ bool Sierpinski::init() {
 
     if (glewInit() != GLEW_OK) {
         std::cerr << "Can't init glew" << std::endl;
-        return -1;
+        return false;
     }
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+
+    model = Model::createPyramid(
+        glm::vec3(1, -1, 0),
+        glm::vec3(-1, -1, 0),
+        glm::vec3(0, 1, 0),
+        glm::vec3(0, 0, 1)
+    );
 
     return true;
 }
@@ -46,12 +53,6 @@ Sierpinski::~Sierpinski() {
 
 void Sierpinski::run() {
     init();
-
-    const GLfloat vertexBuffer[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f,  1.0f, 0.0f,
-    };
 
     // This will identify our vertex buffer
     GLuint vertexBufferHandle;
@@ -78,16 +79,17 @@ void Sierpinski::run() {
         glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
     );
 
-    glm::mat4 model = glm::mat4(1.0f);
-
-    // Give our vertices to OpenGL.
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        sizeof(vertexBuffer),
-        vertexBuffer,
-        GL_STATIC_DRAW);
+    model.setTransform(glm::mat4(1.0f));
 
     do {
+        auto vertexBuffer = model.toVertexBuffer();
+        // Give our vertices to OpenGL.
+        glBufferData(
+            GL_ARRAY_BUFFER,
+            vertexBuffer.size(),
+            vertexBuffer.data(),
+            GL_STATIC_DRAW);
+
         glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 
         glm::mat4 view = glm::lookAt(
@@ -96,7 +98,7 @@ void Sierpinski::run() {
             glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
         );
 
-        glm::mat4 MVP = projection * view * model;
+        glm::mat4 MVP = projection * view * model.getTransform();
 
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
@@ -117,9 +119,7 @@ void Sierpinski::run() {
             (void*)0            // array buffer offset
         );
 
-        // Draw the triangle !
-        // Starting from vertex 0; 3 vertices total -> 1 triangle
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, model.getTriangleCount() * 3);
 
         glDisableVertexAttribArray(vertexPositionModelspaceID);
 

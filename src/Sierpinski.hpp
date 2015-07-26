@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Model.hpp"
+
 class GLFWwindow;
 
 namespace fractals {
@@ -13,6 +15,7 @@ public:
 private:
     bool init();
 
+    Model model;
     GLFWwindow* window = nullptr;
 };
 
