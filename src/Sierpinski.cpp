@@ -52,7 +52,7 @@ bool Sierpinski::init() {
         Color(1, 0, 0),
         Color(0, 1, 0),
         Color(0, 0, 1),
-        Color(1, 1, 0)
+        Color(1, 1, 1)
     );
 
     return true;
@@ -87,12 +87,6 @@ void Sierpinski::run() {
 
     glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 
-    glm::mat4 view = glm::lookAt(
-        glm::vec3(3, 0.5, 3), // Camera location
-        glm::vec3(0, 0, 0), // Where to look
-        glm::vec3(0, 1, 0)  // Up vector
-    );
-
     model.setTransform(glm::mat4(1.0f));
 
     do {
@@ -100,16 +94,14 @@ void Sierpinski::run() {
         auto colorBuffer = model.getColorBuffer();
         assert(vertexBuffer.size() == colorBuffer.size());
 
-        glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
-
         glm::mat4 view = glm::lookAt(
-            glm::vec3(0, 0, 5), // Camera is at (4,3,3), in World Space
-            glm::vec3(0, 0, 0), // and looks at the origin
-            glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+            glm::vec3(10, 0.0, 10), // Camera location
+            glm::vec3(0, 0, 0), // Where to look
+            glm::vec3(0, 1, 0)  // Up vector
         );
 
         auto rotateMatrix = glm::rotate(1.0f, glm::vec3(0.0, 1.0, 0.0));
-        model.setTransform(model.getTransform() * rotateMatrix);
+        model.setTransform(rotateMatrix * model.getTransform());
 
         glm::mat4 MVP = projection * view * model.getTransform();
 
