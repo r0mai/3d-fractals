@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
+#include <cassert>
 #include <iostream>
 
 #include "Shader.hpp"
@@ -38,11 +39,17 @@ bool Sierpinski::init() {
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
+    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+
     model = Model::createPyramid(
         glm::vec3(1, 0, -1),
         glm::vec3(-1, 0, -1),
         glm::vec3(0, 0, 1),
-        glm::vec3(0, 1, 0)
+        glm::vec3(0, 1, 0),
+        Color(1, 0, 0),
+        Color(0, 1, 0),
+        Color(0, 0, 1),
+        Color(1, 1, 0)
     );
 
     return true;
@@ -57,12 +64,14 @@ void Sierpinski::run() {
 
     // This will identify our vertex buffer
     GLuint vertexBufferHandle;
+    GLuint colorBufferHandle;
 
     // Generate 1 buffer, put the resulting identifier in vertexBufferHandle
     glGenBuffers(1, &vertexBufferHandle);
+    glGenBuffers(1, &colorBufferHandle);
 
-    // The following commands will talk about our 'vertexBufferHandle' buffer
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferHandle);
+    glBindBuffer(GL_ARRAY_BUFFER, colorBufferHandle);
 
     GLuint programId = loadShaders("shaders/simple.vert", "shaders/simple.frag");
 
@@ -71,6 +80,7 @@ void Sierpinski::run() {
     // Get a handle for our buffers
     GLuint vertexPositionModelspaceID = glGetAttribLocation(
         programId, "vertexPositionModelspace");
+    GLuint vertexColorID = glGetAttribLocation(programId, "vertexColor");
 
     glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 
@@ -83,12 +93,20 @@ void Sierpinski::run() {
     model.setTransform(glm::mat4(1.0f));
 
     do {
-        auto vertexBuffer = model.toVertexBuffer();
+        auto vertexBuffer = model.getVertexBuffer();
+        auto colorBuffer = model.getColorBuffer();
+        assert(vertexBuffer.size() == colorBuffer.size());
         // Give our vertices to OpenGL.
         glBufferData(
             GL_ARRAY_BUFFER,
             vertexBuffer.size() * sizeof(GLfloat),
             vertexBuffer.data(),
+            GL_STATIC_DRAW);
+
+        glBufferData(
+            GL_ARRAY_BUFFER,
+            colorBuffer.size() * sizeof(GLfloat),
+            colorBuffer.data(),
             GL_STATIC_DRAW);
 
         glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
@@ -123,9 +141,22 @@ void Sierpinski::run() {
             (void*)0            // array buffer offset
         );
 
+        // 2nd attribute buffer : colors
+        glEnableVertexAttribArray(vertexColorID);
+        glBindBuffer(GL_ARRAY_BUFFER, colorBufferHandle);
+        glVertexAttribPointer(
+            vertexColorID,               // The attribute we want to configure
+            3,                           // size
+            GL_FLOAT,                    // type
+            GL_FALSE,                    // normalized?
+            0,                           // stride
+            (void*)0                     // array buffer offset
+        );
+
         glDrawArrays(GL_TRIANGLES, 0, model.getTriangleCount() * 3);
 
         glDisableVertexAttribArray(vertexPositionModelspaceID);
+        glDisableVertexAttribArray(vertexColorID);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -133,6 +164,7 @@ void Sierpinski::run() {
         glfwWindowShouldClose(window) == 0);
 
     glDeleteBuffers(1, &vertexBufferHandle);
+    glDeleteBuffers(1, &colorBufferHandle);
     glDeleteProgram(programId);
 }
 

@@ -6,9 +6,14 @@ Model Model::createPyramid(
     const glm::vec3& p1,
     const glm::vec3& p2,
     const glm::vec3& p3,
-    const glm::vec3& p4)
+    const glm::vec3& p4,
+    const Color& c1,
+    const Color& c2,
+    const Color& c3,
+    const Color& c4)
 {
     Model m;
+
     m.points.push_back(p1);
     m.points.push_back(p2);
     m.points.push_back(p3);
@@ -19,10 +24,15 @@ Model Model::createPyramid(
     m.triangles.push_back({0, 2, 3});
     m.triangles.push_back({1, 2, 3});
 
+    m.colors.push_back(c1);
+    m.colors.push_back(c2);
+    m.colors.push_back(c3);
+    m.colors.push_back(c4);
+
     return m;
 }
 
-std::vector<GLfloat> Model::toVertexBuffer() const {
+std::vector<GLfloat> Model::getVertexBuffer() const {
     std::vector<GLfloat> result;
     result.reserve(triangles.size() * 3 * 3);
 
@@ -43,6 +53,25 @@ std::vector<GLfloat> Model::toVertexBuffer() const {
 
 std::size_t Model::getTriangleCount() const {
     return triangles.size();
+}
+
+std::vector<GLfloat> Model::getColorBuffer() const {
+    std::vector<GLfloat> result;
+    result.reserve(triangles.size() * 3 * 3);
+
+    for (const Triangle& triangle : triangles) {
+        result.push_back(colors[std::get<0>(triangle)].r);
+        result.push_back(colors[std::get<0>(triangle)].g);
+        result.push_back(colors[std::get<0>(triangle)].b);
+        result.push_back(colors[std::get<1>(triangle)].r);
+        result.push_back(colors[std::get<1>(triangle)].g);
+        result.push_back(colors[std::get<1>(triangle)].b);
+        result.push_back(colors[std::get<2>(triangle)].r);
+        result.push_back(colors[std::get<2>(triangle)].g);
+        result.push_back(colors[std::get<2>(triangle)].b);
+    }
+
+    return result;
 }
 
 const glm::mat4& Model::getTransform() const {
