@@ -39,10 +39,10 @@ bool Sierpinski::init() {
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
     model = Model::createPyramid(
-        glm::vec3(1, -1, 0),
-        glm::vec3(-1, -1, 0),
-        glm::vec3(0, 1, 0),
-        glm::vec3(0, 0, 1)
+        glm::vec3(1, 0, -1),
+        glm::vec3(-1, 0, -1),
+        glm::vec3(0, 0, 1),
+        glm::vec3(0, 1, 0)
     );
 
     return true;
@@ -75,9 +75,9 @@ void Sierpinski::run() {
     glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 
     glm::mat4 view = glm::lookAt(
-        glm::vec3(4,3,3), // Camera is at (4,3,3), in World Space
-        glm::vec3(0,0,0), // and looks at the origin
-        glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
+        glm::vec3(3, 0.5, 3), // Camera location
+        glm::vec3(0, 0, 0), // Where to look
+        glm::vec3(0, 1, 0)  // Up vector
     );
 
     model.setTransform(glm::mat4(1.0f));
@@ -87,7 +87,7 @@ void Sierpinski::run() {
         // Give our vertices to OpenGL.
         glBufferData(
             GL_ARRAY_BUFFER,
-            vertexBuffer.size(),
+            vertexBuffer.size() * sizeof(GLfloat),
             vertexBuffer.data(),
             GL_STATIC_DRAW);
 
@@ -99,7 +99,7 @@ void Sierpinski::run() {
             glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
         );
 
-        auto rotateMatrix = glm::rotate(1.0f, glm::vec3(1.0, 0.0, 0.0));
+        auto rotateMatrix = glm::rotate(1.0f, glm::vec3(0.0, 1.0, 0.0));
         model.setTransform(model.getTransform() * rotateMatrix);
 
         glm::mat4 MVP = projection * view * model.getTransform();
