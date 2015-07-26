@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include <iostream>
 
@@ -93,10 +94,13 @@ void Sierpinski::run() {
         glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 
         glm::mat4 view = glm::lookAt(
-            glm::vec3(4,3,3), // Camera is at (4,3,3), in World Space
-            glm::vec3(0,0,0), // and looks at the origin
-            glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
+            glm::vec3(0, 0, 5), // Camera is at (4,3,3), in World Space
+            glm::vec3(0, 0, 0), // and looks at the origin
+            glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
         );
+
+        auto rotateMatrix = glm::rotate(1.0f, glm::vec3(1.0, 0.0, 0.0));
+        model.setTransform(model.getTransform() * rotateMatrix);
 
         glm::mat4 MVP = projection * view * model.getTransform();
 
@@ -126,7 +130,7 @@ void Sierpinski::run() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     } while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-        glfwWindowShouldClose(window) == 0 );
+        glfwWindowShouldClose(window) == 0);
 
     glDeleteBuffers(1, &vertexBufferHandle);
     glDeleteProgram(programId);
