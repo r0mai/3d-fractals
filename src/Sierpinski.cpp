@@ -9,6 +9,7 @@
 #include <cassert>
 #include <iostream>
 
+#include "Transform.hpp"
 #include "Shader.hpp"
 
 namespace fractals {
@@ -44,7 +45,7 @@ bool Sierpinski::init() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    model = Model::createPyramid(
+    model.addPyramid(
         glm::vec3(1, 0, -1),
         glm::vec3(-1, 0, -1),
         glm::vec3(0, 0, 1),

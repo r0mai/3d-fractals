@@ -2,7 +2,7 @@
 
 namespace fractals {
 
-Model Model::createPyramid(
+void Model::addPyramid(
     const glm::vec3& p1,
     const glm::vec3& p2,
     const glm::vec3& p3,
@@ -12,24 +12,22 @@ Model Model::createPyramid(
     const Color& c3,
     const Color& c4)
 {
-    Model m;
+    auto si  = points.size(); // start_index
 
-    m.points.push_back(p1);
-    m.points.push_back(p2);
-    m.points.push_back(p3);
-    m.points.push_back(p4);
+    points.push_back(p1);
+    points.push_back(p2);
+    points.push_back(p3);
+    points.push_back(p4);
 
-    m.triangles.push_back({0, 1, 2});
-    m.triangles.push_back({0, 1, 3});
-    m.triangles.push_back({0, 2, 3});
-    m.triangles.push_back({1, 2, 3});
+    triangles.push_back({si + 0, si + 1, si + 2});
+    triangles.push_back({si + 0, si + 1, si + 3});
+    triangles.push_back({si + 0, si + 2, si + 3});
+    triangles.push_back({si + 1, si + 2, si + 3});
 
-    m.colors.push_back(c1);
-    m.colors.push_back(c2);
-    m.colors.push_back(c3);
-    m.colors.push_back(c4);
-
-    return m;
+    colors.push_back(c1);
+    colors.push_back(c2);
+    colors.push_back(c3);
+    colors.push_back(c4);
 }
 
 std::vector<GLfloat> Model::getVertexBuffer() const {

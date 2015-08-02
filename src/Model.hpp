@@ -12,7 +12,9 @@ namespace fractals {
 
 class Model {
 public:
-    static Model createPyramid(
+    Model() = default;
+
+    void addPyramid(
         const glm::vec3& p1,
         const glm::vec3& p2,
         const glm::vec3& p3,
