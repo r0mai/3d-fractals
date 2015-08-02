@@ -24,7 +24,7 @@ bool Sierpinski::init() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-    window = glfwCreateWindow( 1024, 768, "Tutorial 01", NULL, NULL);
+    window = glfwCreateWindow(1024, 768, "Tutorial 01", NULL, NULL);
 
     if (!window) {
         std::cerr << "Can't open glfw window" << std::endl;
@@ -50,6 +50,16 @@ bool Sierpinski::init() {
         glm::vec3(-1, 0, -1),
         glm::vec3(0, 0, 1),
         glm::vec3(0, 1, 0),
+        Color(1, 0, 0),
+        Color(0, 1, 0),
+        Color(0, 0, 1),
+        Color(1, 1, 1)
+    );
+    model.addPyramid(
+        glm::vec3(2, 1, 0),
+        glm::vec3(0, 1, 0),
+        glm::vec3(1, 1, 2),
+        glm::vec3(1, 2, 1),
         Color(1, 0, 0),
         Color(0, 1, 0),
         Color(0, 0, 1),
@@ -116,11 +126,9 @@ void Sierpinski::run() {
 
         // 1st attribute buffer : vertices
         glEnableVertexAttribArray(vertexPositionModelspaceID);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBufferHandle);
 
         // 2nd attribute buffer : colors
         glEnableVertexAttribArray(vertexColorID);
-        glBindBuffer(GL_ARRAY_BUFFER, colorBufferHandle);
 
         // Give our vertices to OpenGL.
         glBufferData(
