@@ -19,10 +19,10 @@ void Model::addPyramid(
     points.push_back(p3);
     points.push_back(p4);
 
-    triangles.push_back({si + 0, si + 1, si + 2});
-    triangles.push_back({si + 0, si + 1, si + 3});
-    triangles.push_back({si + 0, si + 2, si + 3});
-    triangles.push_back({si + 1, si + 2, si + 3});
+    triangles.push_back(std::make_tuple(si + 0, si + 1, si + 2));
+    triangles.push_back(std::make_tuple(si + 0, si + 1, si + 3));
+    triangles.push_back(std::make_tuple(si + 0, si + 2, si + 3));
+    triangles.push_back(std::make_tuple(si + 1, si + 2, si + 3));
 
     colors.push_back(c1);
     colors.push_back(c2);
